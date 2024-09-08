@@ -4,11 +4,15 @@ AlphaDou is a reinforcement learning framework for [DouDizhu](https://en.wikiped
 
 Deep Monte Carlo framework modified from the open source project [DouZero ResNet](https://github.com/Vincentzyx/Douzero_Resnet)
 
-Compared to the framework provided by the open source project [Douzero](https://github.com/kwai/DouZero), the buffers part has been removed. 
+Compared to the framework provided by the open source project [DouZero](https://github.com/kwai/DouZero), the buffers part has been removed. 
 
 The framework introduces a bidding phase, which allows RL models to be trained in realistic landlord environments.
 
-<img width="300" src="https://raw.githubusercontent.com/RuBP17/AlphaDou/main/pics/compare.png" alt="Logo" />
+The trained model vs. the open source DouZero model has a win rate of 61.7%, reaching to reach the state-of-the-art.
+
+<img width="500" src="https://raw.githubusercontent.com/RuBP17/AlphaDou/main/pics/compare.png" alt="Logo" />
+
+
 
 ## Training
 To use GPU for training, run
