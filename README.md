@@ -8,7 +8,7 @@ Compared to the framework provided by the open source project [Douzero](https://
 
 The framework introduces a bidding phase, which allows RL models to be trained in realistic landlord environments.
 
-<img width="300" src="https://raw.githubusercontent.com/RuBP17/AlphaDou/main/imgs/compare.png" alt="Logo" />
+<img width="300" src="https://raw.githubusercontent.com/RuBP17/AlphaDou/main/pics/compare.png" alt="Logo" />
 
 ## Training
 To use GPU for training, run
