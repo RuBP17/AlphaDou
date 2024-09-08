@@ -29,7 +29,7 @@ For example, if we have 4 GPUs, where we want to use the first 3 GPUs to have 15
 ```
 python3 train.py --gpu_devices 0,1,2,3 --num_actor_devices 3 --num_actors 15 --training_device 3
 ```
-To use CPU training or simulation (Windows can only use CPU for actors), use the following arguments:
+To use CPU training or simulation, use the following arguments:
 *   `--training_device cpu`: Use CPU to train the model
 *   `--actor_device_cpu`: Use CPU as actors
 
@@ -41,3 +41,46 @@ The following command only runs actors on CPU:
 ```
 python3 train.py --actor_device_cpu
 ```
+
+
+## Evaluation
+
+The evaluation can be performed with GPU or CPU (GPU will be much faster). The performance is evaluated through self-play. We have provided pre-trained models and some heuristics as baselines:
+For the bidding phase, the following agendas are provided here for testing:
+*   [random](douzero/evaluation/random_agent.py): agents that play randomly 
+*   SLModel(`baselines/SLModel/`): Threshold bidding Model Trained by Supervised Learning. You can set up "Supervised" in evaluate.py to test the SLModel
+
+For the cardplay phase, the following agendas are provided here for testing:
+*   [random](douzero/evaluation/random_agent.py): agents that play randomly 
+*   DouZero-ADP (`baselines/test/`): the pretrained DouZero agents with Average Difference Points (ADP) as objective
+*   DouZero ResNet (`baselines/best/`): the pretrained DouZero ResNet agents with Average Difference Points (ADP) as objective
+
+### Step 1: Generate evaluation data
+```
+python3 generate_eval_data.py
+```
+Some important hyperparameters are as follows.
+*   `--output`: where the pickled data will be saved
+*   `--num_games`: how many random games will be generated
+
+### Step 2: Self-Play
+```
+python3 evaluate.py
+```
+Some important hyperparameters are as follows.
+*   `--player_1_bid`: which agent will play as First bidding player, which can be random, Supervised, or the path of the pre-trained model
+*   `--player_2_bid`: which agent will play as Second bidding player, which can be random, Supervised, or the path of the pre-trained model
+*   `--player_3_bid`: which agent will play as Third bidding player, which can be random, Supervised, or the path of the pre-trained model
+*   `--player_1_playcard`: which agent will play as Landlord, which can be random, or the path of the pre-trained model
+*   `--player_2_playcard`: which agent will play as LandlordUp (the one plays before the Landlord), which can be random, or the path of the pre-trained model
+*   `--player_3_playcard`: which agent will play as LandlordDown (the one plays after the Landlord), which can be random, or the path of the pre-trained model
+*   `--eval_data`: the pickle file that contains evaluation data
+*   `--num_workers`: how many subprocesses will be used
+*   `--gpu_device`: which GPU to use. It will use CPU by default
+
+### Evaluate while training
+auto_test.py: can be used to automatically test new models while training.
+```
+python3 auto_test.py
+```
+
