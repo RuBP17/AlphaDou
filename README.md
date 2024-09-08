@@ -2,7 +2,7 @@
 
 AlphaDou is a reinforcement learning framework for [DouDizhu](https://en.wikipedia.org/wiki/Dou_dizhu) ([斗地主](https://baike.baidu.com/item/%E6%96%97%E5%9C%B0%E4%B8%BB/177997)), the most popular card game in China. 
 
-Deep Monte Carlo framework modified from the open source project [DouZero ResNet](https://github.com/Vincentzyx/Douzero_Resnet)
+Deep Monte Carlo framework modified from the open source project [DouZero ResNet](https://github.com/Vincentzyx/Douzero_Resnet).
 
 Compared to the framework provided by the open source project [DouZero](https://github.com/kwai/DouZero), the buffers part has been removed. 
 
