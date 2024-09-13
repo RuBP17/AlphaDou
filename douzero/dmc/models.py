@@ -78,7 +78,15 @@ class GeneralModelResnet(nn.Module):
             self.in_planes = planes * block.expansion
         return nn.Sequential(*layers)
 
-    def forward(self, z, x, return_value=False, flags=None):
+    def check_no_bombs(self, a):
+        reshaped_a = a[:52].view(-1, 4)
+        sums = reshaped_a.sum(dim=1)
+        if torch.all(sums < 4) and a[52] + a[53] < 2:
+            return True
+        else:
+            return False
+
+    def forward(self, z, x, return_value=False, flags=None, debug=False):
 
         out = self.layer1(z)
         out = self.layer2(out)
@@ -92,13 +100,26 @@ class GeneralModelResnet(nn.Module):
         win_rate, win, lose = torch.split(out, (1, 1, 1), dim=-1)
         win_rate = torch.tanh(win_rate)
         _win_rate = (win_rate + 1) / 2
-        out = _win_rate * win + (1. - _win_rate) * lose
+        bombs = True
+        if self.check_no_bombs(z[0, 2]) and self.check_no_bombs(z[0, 3]) and (0 in z[0, 11]):
+            bombs = False
+            out = _win_rate
+        else:
+            out = _win_rate * win + (1. - _win_rate) * lose
 
         if return_value:
             return dict(values=(win_rate, win, lose))
         else:
             if flags is not None and flags.exp_epsilon > 0 and np.random.rand() < flags.exp_epsilon:
                 action = torch.randint(out.shape[0], (1,))[0]
+            elif flags is not None and flags.action_threshold > 0 and bombs:
+                max_adp = torch.max(out)
+                if max_adp >= 0:
+                    min_threshold = max_adp * (1 - flags.action_threshold)
+                else:
+                    min_threshold = max_adp * (1 + flags.action_threshold)
+                valid_indices = torch.where(out >= min_threshold)[0]
+                action = valid_indices[torch.argmax(_win_rate[valid_indices])]
             else:
                 action = torch.argmax(out, dim=0)[0]
             return dict(action=action, max_value=torch.max(out), values=out)

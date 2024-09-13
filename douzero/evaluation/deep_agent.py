@@ -5,6 +5,7 @@ from douzero.env.env import get_obs
 from douzero.env.env_douzero import get_obs_douzero
 from douzero.env.env_res import _get_obs_resnet
 from baseline.SLModel.BidModel import Net2 as Net
+from collections import Counter
 
 
 def _load_model(position, model_path, model_type):
@@ -42,6 +43,18 @@ class DeepAgent:
         self.EnvCard2RealCard = {3: '3', 4: '4', 5: '5', 6: '6', 7: '7',
                             8: '8', 9: '9', 10: 'T', 11: 'J', 12: 'Q',
                             13: 'K', 14: 'A', 17: '2', 20: 'X', 30: 'D'}
+        
+    def check_no_bombs(self, cards):
+        card_counts = Counter(cards)
+        for count in card_counts.values():
+            if count == 4:
+                return False
+
+        if 20 in card_counts and 30 in card_counts:
+            return False
+
+        return True
+
 
     def act(self, infoset):
         if self.model_type == "test":
@@ -62,6 +75,24 @@ class DeepAgent:
             if infoset.player_position in ["landlord", "landlord_up", "landlord_down"]:
                 _win_rate = (win_rate + 1) / 2
                 y_pred = _win_rate * win + (1. - _win_rate) * lose
+                _win_rate = _win_rate.detach().cpu().numpy()
+                y_pred = y_pred.detach().cpu().numpy()
+                if self.check_no_bombs(infoset.player_hand_cards) and infoset.spring is False and self.check_no_bombs(
+                        infoset.other_hand_cards):
+                    best_action_index = np.argmax(_win_rate, axis=0)[0]
+                    best_action = infoset.legal_actions[best_action_index]
+                else:
+                    y_pred = y_pred.flatten()
+                    _win_rate = _win_rate.flatten()
+                    max_adp = np.max(y_pred)
+                    if max_adp >= 0:
+                        min_threshold = max_adp * 0.95
+                    else:
+                        min_threshold = max_adp * 1.05
+                    valid_indices = np.where(y_pred >= min_threshold)[0]
+                    best_action_index = valid_indices[np.argmax(_win_rate[valid_indices])]
+                    best_action = infoset.legal_actions[best_action_index]
+                return best_action
             else:
                 y_pred = win_rate[:, 0] * win + win_rate[:, 1] * lose
         y_pred = y_pred.detach().cpu().numpy()
