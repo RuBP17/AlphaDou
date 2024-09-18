@@ -19,7 +19,7 @@ To use GPU for training, run
 ```
 python3 train.py
 ```
-This will train DouZero on one GPU. To train DouZero on multiple GPUs. Use the following arguments.
+This will train AlphaDou on one GPU. To train AlphaDou on multiple GPUs. Use the following arguments.
 *   `--gpu_devices`: what gpu devices are visible
 *   `--num_actor_devices`: how many of the GPU deveices will be used for simulation, i.e., self-play
 *   `--num_actors`: how many actor processes will be used for each device
