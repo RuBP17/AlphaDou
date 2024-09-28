@@ -8,7 +8,7 @@ Compared to the framework provided by the open source project [DouZero](https://
 
 The framework introduces a bidding phase, which allows RL models to be trained in realistic landlord environments.
 
-The trained model(Card Model) vs. the open source DouZero(ADP) model has a win rate of 61.7%, reaching to reach the state-of-the-art.
+The trained model(Card Model) vs. the open source DouZero(ADP) model has a win rate of 61.7%, reaching the state-of-the-art.
 
 <img width="500" src="https://raw.githubusercontent.com/RuBP17/AlphaDou/main/pics/compare.png" alt="Logo" />
 
@@ -19,7 +19,7 @@ To use GPU for training, run
 ```
 python3 train.py
 ```
-This will train DouZero on one GPU. To train DouZero on multiple GPUs. Use the following arguments.
+This will train AlphaDou on one GPU. To train AlphaDou on multiple GPUs. Use the following arguments.
 *   `--gpu_devices`: what gpu devices are visible
 *   `--num_actor_devices`: how many of the GPU deveices will be used for simulation, i.e., self-play
 *   `--num_actors`: how many actor processes will be used for each device
