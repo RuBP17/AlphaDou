@@ -448,11 +448,11 @@ class GameEnv(object):
             for card in action:
                 self.info_sets[
                     self.acting_player_position].player_hand_cards.remove(card)
-                # 统计地主出牌次数
-                if self.acting_player_position == "landlord":
-                    self.spring_count["landlord"] += 1
-                else:
-                    self.spring_count["farmer"] += 1
+            # 统计地主出牌次数
+            if self.acting_player_position == "landlord":
+                self.spring_count["landlord"] += 1
+            else:
+                self.spring_count["farmer"] += 1
             self.info_sets[self.acting_player_position].player_hand_cards.sort()
 
     def get_legal_card_play_actions(self):
