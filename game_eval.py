@@ -292,7 +292,7 @@ class GameEnv(object):
                 self.num_wins[pos] += 1
                 self.winner = pos
                 bomb_num = self.bomb_num + 1 if self.spring else self.bomb_num
-                s = base_score + 4 * bomb_num if pos == 'landlord' else base_score + 2 * bomb_num
+                s = base_score * 2 ** bomb_num
                 if pos == "landlord":
                     if pos == self.bid_info_sets["first"].play_card_position:
                         self.bid_winner = "first"
@@ -338,7 +338,7 @@ class GameEnv(object):
                 self.num_scores[pos] += s
             elif utility < 0:
                 bomb_num = self.bomb_num + 1 if self.spring else self.bomb_num
-                s = base_score + 4 * bomb_num if pos == 'landlord' else base_score + 2 * bomb_num
+                s = base_score * 2 ** bomb_num
                 self.num_scores[pos] -= s
             else:
                 self.num_wins['draw'] += 1
