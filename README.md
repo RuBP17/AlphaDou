@@ -15,6 +15,10 @@ The trained model(Card Model) vs. the open source DouZero(ADP) model has a win r
 
 
 ## Training
+Recommended
+python version 3.9.12
+pytorch version 2.0.0
+
 To use GPU for training, run
 ```
 python3 train.py
